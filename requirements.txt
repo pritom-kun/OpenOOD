@@ -1,0 +1,18 @@
+numpy
+Cython
+torch
+torchvision
+scikit-learn
+json5
+matplotlib
+scipy
+tqdm
+pyyaml
+pre-commit
+opencv-python
+imgaug
+pandas
+diffdist
+# faiss-gpu
+gdown
+libmr
