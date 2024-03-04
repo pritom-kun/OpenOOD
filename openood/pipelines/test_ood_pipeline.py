@@ -44,20 +44,23 @@ class TestOODPipeline:
         else:
             acc_metrics = evaluator.eval_acc(net, id_loader_dict['test'],
                                              postprocessor)
-        print('\nAccuracy {:.2f}%'.format(100 * acc_metrics['acc']),
+        print('\nAccuracy {:.4f}%'.format(100 * acc_metrics['acc']),
               flush=True)
         print(u'\u2500' * 70, flush=True)
 
         # start evaluating ood detection methods
         timer = time.time()
-        if self.config.evaluator.ood_scheme == 'fsood':
+        if self.config.evaluator.name == 'ece':
+            print('\nECE {:.4f}%'.format(100 * acc_metrics['ece']),
+              flush=True)
+        elif self.config.evaluator.ood_scheme == 'fsood':
             evaluator.eval_ood(net,
-                               id_loader_dict,
-                               ood_loader_dict,
-                               postprocessor,
-                               fsood=True)
+                            id_loader_dict,
+                            ood_loader_dict,
+                            postprocessor,
+                            fsood=True)
         else:
             evaluator.eval_ood(net, id_loader_dict, ood_loader_dict,
-                               postprocessor)
+                            postprocessor)
         print('Time used for eval_ood: {:.0f}s'.format(time.time() - timer))
         print('Completed!', flush=True)

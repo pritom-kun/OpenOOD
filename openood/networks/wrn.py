@@ -118,7 +118,7 @@ class WideResNet(nn.Module):
             elif isinstance(m, nn.Linear):
                 m.bias.data.zero_()
 
-    def forward(self, x, return_feature=False):
+    def forward(self, x, return_feature=False, return_feature_list=False):
         feature1 = self.conv1(x)
         feature2 = self.block1(feature1)
         feature3 = self.block2(feature2)
@@ -131,6 +131,8 @@ class WideResNet(nn.Module):
             feature, feature1, feature2, feature3, feature4, feature5
         ]
         if return_feature:
+            return logits_cls, feature
+        elif return_feature_list:
             return logits_cls, feature_list
         else:
             return logits_cls

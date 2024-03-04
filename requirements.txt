@@ -13,6 +13,6 @@ opencv-python
 imgaug
 pandas
 diffdist
-# faiss-gpu
+faiss-gpu
 gdown
 libmr

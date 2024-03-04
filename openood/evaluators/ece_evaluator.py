@@ -27,11 +27,11 @@ class ECEEvaluator(BaseEvaluator):
                  data_loader: DataLoader,
                  postprocessor: BasePostprocessor = None,
                  epoch_idx: int = -1,
-                 num_bins: int = 15):
+                 num_bins: int = 10):
         net.eval()
         """Calculates ECE.
         Args:
-          num_bins: the number of bins to partition all samples. we set it as 15.
+          num_bins: the number of bins to partition all samples. we set it as 10.
         Returns:
           ece: the calculated ECE value.
         """
