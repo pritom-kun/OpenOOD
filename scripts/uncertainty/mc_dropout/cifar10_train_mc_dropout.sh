@@ -18,7 +18,7 @@ python main.py \
 configs/networks/dropout_net.yml \
 configs/pipelines/train/baseline.yml \
 configs/preprocessors/base_preprocessor.yml \
---network.backbone.name resnet18_32x32 \
+--network.backbone.name wrn \
 --network.backbone.pretrained False \
 --optimizer.num_epochs 100 \
 --num_workers 8

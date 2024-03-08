@@ -25,6 +25,15 @@ class TestAccPipeline:
         # start calculating accuracy
         print('\nStart evaluation...', flush=True)
         test_metrics = evaluator.eval_acc(net, test_loader)
-        print('\nComplete Evaluation, accuracy {:.2f}%'.format(
-            100 * test_metrics['acc']),
+        print('\nComplete Evaluation, accuracy {:.4f}'.format(
+            test_metrics['acc']),
+              flush=True)
+        if self.config.evaluator.name == 'ece':
+            print('\nECE {:.4f}'.format(test_metrics['ece']),
+              flush=True)
+            print('\nAUROC {:.4f}'.format(test_metrics['auroc']),
+              flush=True)
+            print('\nAPR {:.4f}'.format(test_metrics['apr']),
+              flush=True)
+            print('\nBrier Score {:.4f}'.format(test_metrics['brier']),
               flush=True)

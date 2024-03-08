@@ -11,6 +11,7 @@ import openood.utils.comm as comm
 from openood.postprocessors import BasePostprocessor
 from openood.utils import Config
 from .base_evaluator import BaseEvaluator
+from .metrics import brier_score, get_auc
 
 
 class ECEEvaluator(BaseEvaluator):
@@ -41,6 +42,7 @@ class ECEEvaluator(BaseEvaluator):
         total_scores = []
         total_preds = []
         total_labels = []
+        preds = []
         with torch.no_grad():
             for batch in tqdm(data_loader,
                               desc='Eval: ',
@@ -55,6 +57,7 @@ class ECEEvaluator(BaseEvaluator):
                 loss = F.cross_entropy(output, target)
 
                 # accuracy
+                preds.append(output.data.cpu().numpy())
                 pred = output.data.max(1)[1]
                 score = output.data.max(1)[0]
                 correct += pred.eq(target.data).sum().item()
@@ -69,6 +72,16 @@ class ECEEvaluator(BaseEvaluator):
         scores_np = np.reshape(total_scores, -1)
         preds_np = np.reshape(total_preds, -1)
         labels_np = np.reshape(total_labels, -1)
+        
+        corrects = ((preds_np == labels_np)).astype(int)
+
+        auroc = get_auc(scores_np, corrects, score_type='AUROC')
+        apr = get_auc(scores_np, corrects, score_type='APR')
+
+        preds = np.vstack(preds)
+        
+        brier = brier_score(preds, labels_np)
+
         acc_tab = np.zeros(num_bins)  # Empirical (true) confidence
         mean_conf = np.zeros(num_bins)  # Predicted confidence
         nb_items_bin = np.zeros(num_bins)  # Number of items in the bins
@@ -105,4 +118,8 @@ class ECEEvaluator(BaseEvaluator):
         metrics['loss'] = self.save_metrics(loss)
         metrics['acc'] = self.save_metrics(acc)
         metrics['ece'] = self.save_metrics(ece)
+        metrics['auroc'] = self.save_metrics(auroc)
+        metrics['apr'] = self.save_metrics(apr)
+        metrics['brier'] = self.save_metrics(brier)
+        
         return metrics

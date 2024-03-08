@@ -113,3 +113,28 @@ def detection(ind_confidences,
         return best_error, best_delta, all_errors, all_thresholds
     else:
         return best_error, best_delta
+
+
+def brier_score(pred, label):
+    
+    num_nodes = pred.shape[0]
+    if num_nodes == 0:
+        return np.nan
+    indices = np.arange(num_nodes)
+    prob = pred.copy()
+    prob[indices, label] -= 1
+
+    return np.mean(np.linalg.norm(prob, axis=-1, ord=2))
+
+
+def get_auc(scores, corrects, score_type='AUROC'):
+    
+    # avoid INF or NAN values
+    scores = np.nan_to_num(scores)
+    
+    if score_type == 'AUROC':
+        fpr, tpr, _ = metrics.roc_curve(corrects, scores)
+        return metrics.auc(fpr, tpr)
+    if score_type == 'APR':
+        prec, rec, _ = metrics.precision_recall_curve(corrects, scores)
+        return metrics.auc(rec, prec)

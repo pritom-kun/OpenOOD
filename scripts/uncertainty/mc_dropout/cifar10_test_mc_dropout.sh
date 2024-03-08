@@ -22,5 +22,5 @@ configs/preprocessors/base_preprocessor.yml \
 configs/postprocessors/dropout.yml \
 --evaluator.name ood \
 --num_workers 8 \
---network.checkpoint 'results/cifar10_dropout_net_base_e100_lr0.1_default/best.ckpt' \
+--network.checkpoint 'results/cifar10_dropout_net_base_e100_lr0.1_default/s0/best.ckpt' \
 --mark 0
